@@ -43,6 +43,34 @@ export default class Crust {
       throw error;
     }
   }
+  async uploadJsonToIPFS(file: any) {
+    try {
+      const keyring = new Keyring();
+      const pair = keyring.addFromUri(this.seeds);
+      const sig = pair.sign(pair.address);
+      const sigHex = "0x" + Buffer.from(sig).toString("hex");
+
+      const authHeader = Buffer.from(`sub-${pair.address}:${sigHex}`).toString(
+        "base64"
+      );
+
+      const ipfsGateway = "https://crustgateway.com";
+      const ipfs = create({
+        url: ipfsGateway + "/api/v0/add",
+        headers: {
+          authorization: "Basic " + authHeader,
+        },
+      });
+      const metadata = await ipfs.add(file);
+      if (metadata) {
+        return metadata;
+      } else {
+        throw new Error("IPFS add failed, please try again.");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async placeStorageOrder(
     fileCid: string,

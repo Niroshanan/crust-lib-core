@@ -1,6 +1,6 @@
 {
   "name": "crust-lib-core",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "package to handle crust file pinning and add prepaid",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
